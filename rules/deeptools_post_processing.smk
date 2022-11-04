@@ -8,6 +8,7 @@ rule bamcoverage:
         "Create genome coverage tracks"
     benchmark:
         RESULT_DIR + "benchmark/bamcoverage_{sample}.benchmark.txt"
+    singularity:'docker://stjudecloud/deeptools:branch-chipseq-1.0.2'
     params:
          binsize                =   config["bamcoverage"]["binsize"],
          normalizeUsing         =   config["bamcoverage"]["normalizeUsing"],

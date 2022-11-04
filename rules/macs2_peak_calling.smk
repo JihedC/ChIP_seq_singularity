@@ -12,6 +12,7 @@ rule call_narrow_peaks:
         qvalue      = str(config['macs2']['qvalue'])
     log:
         RESULT_DIR + "logs/macs2/{sample}_peaks.narrowPeak.log"
+    singularity:'docker://biowardrobe2/macs2:v2.1.1'
     conda:
         "../envs/macs2_env.yaml"
     shell:

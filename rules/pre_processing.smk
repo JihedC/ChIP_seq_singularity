@@ -15,6 +15,7 @@ rule fastp:
         sampleName = "{sample}",
         in_and_out_files =  get_trim_names,
         qualified_quality_phred = config["fastp"]["qualified_quality_phred"]
+    singularity:'docker://biocontainers/fastp:v0.20.1_cv1'
     resources: cpus=10
     shell:
         "touch {output.fq2};\
@@ -35,6 +36,7 @@ rule fastqc:
         ""
     message:
         "Quality check of trimmed {wildcards.sample} sample with FASTQC"
+    singularity:'docker://biocontainers/fastqc:v0.11.9_cv8'
     wrapper:
         "0.27.1/bio/fastqc"
 
@@ -84,6 +86,7 @@ rule sort:
     threads: 10
     log:
         RESULT_DIR + "logs/samtools/{sample}.sort.log"
+    singularity:'docker://biocontainers/samtools:v1.9-4-deb_cv1'        
     shell:
         """
         samtools sort -@ {threads} -o {output.bam} {input} &>{log}
@@ -97,5 +100,6 @@ rule index_bam:
         RESULT_DIR + "mapped/{sample}.sorted.bam.bai"
     log:
         RESULT_DIR + "log/sort/{sample}.log"
+    singularity:'docker://biocontainers/samtools:v1.9-4-deb_cv1'
     shell:
         "samtools index {input} 2>{log}"
