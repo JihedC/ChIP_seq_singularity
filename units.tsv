@@ -1,0 +1,6 @@
+sample	fq1	fq2	condition
+100K	fastq/100K_R1.fq	fastq/100K_R2.fq	treatment
+50K	fastq/50K_R1.fq	fastq/50K_R2.fq	treatment
+ChIP1	fastq/SRX091645_T1.fq		treatment
+ChIP2	fastq/SRX091646_T1.fq		treatment
+
