@@ -1,3 +1,5 @@
+################## Rules used for MACS2 peak calling ##################
+
 rule call_narrow_peaks:
     input:
         treatment       =   RESULT_DIR + "mapped/{treatment}.sorted.bam",

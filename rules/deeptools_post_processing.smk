@@ -1,3 +1,4 @@
+################## Rules used to generate Bigwig ##################
 rule bamcoverage:
     input:
         bam     =   RESULT_DIR + "mapped/{sample}.sorted.bam",

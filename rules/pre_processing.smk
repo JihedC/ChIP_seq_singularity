@@ -1,4 +1,4 @@
-################## Rules used for QC ##################
+################## Rules used for QC, mapping, sorting and indexing of BAM files ##################
 rule fastp:
     input:
         get_fastq
