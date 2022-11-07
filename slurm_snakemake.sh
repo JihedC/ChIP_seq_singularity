@@ -11,6 +11,7 @@ module purge
 module load genomics/ngs/samtools/1.11/gcc-8.3.1
 module load genomics/ngs/aligners/bowtie2/2.4.2/gcc-8.3.1
 module load container/singularity/3.10.0/gcc.8.5.0
+module load tools/miniconda/python3.8/4.8.5
 # If the workflow does not work anymore, 
 # check that the modules are still correctly installed on the HPC
 # they may have been removed or updated
