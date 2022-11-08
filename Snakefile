@@ -102,7 +102,7 @@ MACS2               =     expand(RESULT_DIR + "macs2/{treatment}_vs_{control}_pe
 rule all:
     input:
         FASTP,
-        FASTQC,
+        #FASTQC,
         BOWTIE2,
         BIGWIG,
         MACS2
