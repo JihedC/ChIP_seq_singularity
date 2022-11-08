@@ -1,6 +1,4 @@
 ################## Rules used to download genome and GTF annotations ##################
-
-
 rule download_genome:
 	params: 
 		fasta   =   config["GENOME_ZIP_FASTA_URL"]

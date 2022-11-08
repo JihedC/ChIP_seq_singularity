@@ -1,3 +1,5 @@
+################## Rules used for MACS2 peak calling ##################
+
 rule call_narrow_peaks:
     input:
         treatment       =   RESULT_DIR + "mapped/{treatment}.sorted.bam",
@@ -6,6 +8,7 @@ rule call_narrow_peaks:
         RESULT_DIR + "macs2/{treatment}_vs_{control}_peaks.narrowPeak"
     message:
         "Calling narrowPeak for {wildcards.sample}"
+    singularity:'docker://biowardrobe2/macs2:v2.1.1'
     params:
         name        = "{treatment}_vs_{control}",        #this option will give the output name, has to be similar to the output
         genomesize  = str(config['macs2']['genomesize']),

@@ -14,6 +14,8 @@ from snakemake.utils import R
 ################## Configuration file ##################
 
 configfile: "config.yaml"
+singularity:'docker://biocontainers/bowtie2:v2.4.1_cv1'
+
 WORKING_DIR =   config["working_dir"]
 RESULT_DIR  =   config["result_dir"]
 annotation  =   config["annotation"]

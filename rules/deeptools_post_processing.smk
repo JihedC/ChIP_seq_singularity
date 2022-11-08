@@ -1,3 +1,4 @@
+################## Rules used to generate Bigwig ##################
 rule bamcoverage:
     input:
         bam     =   RESULT_DIR + "mapped/{sample}.sorted.bam",
@@ -8,6 +9,7 @@ rule bamcoverage:
         "Create genome coverage tracks"
     benchmark:
         RESULT_DIR + "benchmark/bamcoverage_{sample}.benchmark.txt"
+    singularity:'docker://stjudecloud/deeptools:branch-chipseq-1.0.2'
     params:
          binsize                =   config["bamcoverage"]["binsize"],
          normalizeUsing         =   config["bamcoverage"]["normalizeUsing"],
