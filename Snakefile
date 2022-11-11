@@ -102,16 +102,16 @@ MACS2               =     expand(RESULT_DIR + "macs2/{treatment}_vs_{control}_pe
 rule all:
     input:
         FASTP,
-        #FASTQC,
         BOWTIE2,
         BIGWIG,
         MACS2
         
     message: "ChIP-seq SE pipeline succesfully run."		#finger crossed to see this message!
-
+    singularity:'docker://ewels/multiqc:v1.13'
     shell:"""
-    cp units.tsv RESULT_DIR 
-    cp config.yaml RESULT_DIR
+    cp units.tsv results/ 
+    cp config.yaml results/
+    multiqc *  --outdir results/
     #rm -rf {WORKING_DIR}
     """
 
