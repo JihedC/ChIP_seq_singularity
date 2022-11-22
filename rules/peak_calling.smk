@@ -7,7 +7,7 @@ rule call_narrow_peaks:
     output:
         RESULT_DIR + "macs2/{treatment}_vs_{control}_peaks.narrowPeak"
     message:
-        "Calling narrowPeak for {wildcards.sample}"
+        "Calling narrowPeak for {wildcards.treatment}"
     singularity:'docker://biowardrobe2/macs2:v2.1.1'
     params:
         name        = "{treatment}_vs_{control}",        #this option will give the output name, has to be similar to the output
