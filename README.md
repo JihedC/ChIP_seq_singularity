@@ -15,28 +15,58 @@ Snakemake pipeline made for reproducible analysis of paired-end Illumina ChIP-se
 This paragraph should get the Snakemake workflow to work in few minutes:
 
 - download the pipeline: `git clone https://github.com/JihedC/ChIP_seq_singularity.git`
+
 - change directory to the newly downloaded pipeline: `cd ChIP_seq_singularity/`
+
+- To run the workflow requires conda to be installed. First check if conda is installed in your session
+
 - if conda is not installed:
   - download miniconda3: `wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh`
-  - install miniconda in your folder: `sh Miniconda3-latest-Linux-x86_64.sh`
-  Say yes for the licence terms and either ENTER to confirm the location of installation or choose another location for the installation.
-  After the installation you will need to restart your terminal and reconnect to the HPC.
-  At the restart, "(base)" should appear on the left side of the prompt which means that you are in the base environment
-- install Mamba: `conda install -n base -c conda-forge mamba`  this might take a while, but it's worth it because it will make conda much faster. Accept all the install.
+  - install miniconda in your folder with: `sh Miniconda3-latest-Linux-x86_64.sh`. 
+  - Follow the instruction by pressing `ENTER` to go through the disclaimers and informations. You will be offered the choice to accept or not the licence terms. 
+  - Type `yes` to continue the installation.
+  - You will be then offered to define the location of installation of miniconda3. **(For a usage on Shark, due to space limit in the /home folder, you need to make sur to install the miniconda in your /exports/humgen/{username}/miniconda3/ folder by typing the absolute path in the prompt)**
+  - Once the installation is finished, conda will offer to initialize Miniconda3, type `yes` and press `ENTER`
+  - After the installation **you will need to restart your terminal** and reconnect to the HPC. On shark just disconnect from your session and connect as you usually do.
+  - At the restart, `(base)` should appear on the left side of the prompt which means that you are in the base environment and that **Miniconda installation was successful**.
+
+- install Mamba: `conda install -n base -c conda-forge mamba`  this might take a while, but it's worth it because it will make conda much faster. Accept all the install. This can be done in any folder.
+
 - activate the base environment: `conda activate base`
-- install snakemake with mamba: `mamba create -c conda-forge -c bioconda -n snakemake snakemake` Accept the insllation with "Y"
+
+- install snakemake with mamba: `mamba create -c conda-forge -c bioconda -n snakemake snakemake=7.18.1` Accept the insllation with "Y"
+
 - activate the snakemake environment: `conda activate snakemake`
-- control that you are in the folder containing the workflow/pipeline: `pwd`
+
+- control that you are in the folder containing the workflow/pipeline: `pwd` otherwise go back to the folder with `{absolute_path_to_pipeline}/ChIP_seq_singularity/`
+
 - Use the dry run option to check that the download pipeline should work: `snakemake -np` if nothing appears in red, the pipeline should work.
-- Adapt the units.tsv file to your sample name and their path on the HPC. Make sure that the columns are tab seaparated values.
+
+`snakemake -np` will use the dummy samples available when you download the pipeline to test if all the rules/job of the workflow are properly set.
+A list of Job and command line should appear in the terminal. At the bottom you should see the following image:
+
+![](docs/summary_jobs_dry_run.png)
+
+A successful run should have a total of 27 jobs. 
+
+If error are raised, please read the error message. You may not be in the right folder or forgot to activate the snakemake environment.
+
+To run your own files adapt the `units.tsv` file, if you wishe only to test the workflow ** DO NOT** modify the `units.tsv`
+
+- Adapt the `units.tsv` file to your sample name and their path on the HPC using your favorite text editor. For example with `nano units.tsv`. Make sure that the columns are tab seaparated values.
+
 - Use the dry run option to check that the pipeline will run now that the units.tsv is adapted: `snakemake -np` if nothing appears in red, the pipeline should work.
+
+- Before running the pipeline on shark/slurm make sure that `slurm-cluster-status.py` have the following permissions set :"-rwxr-xr-x".
+If not the job scheduler will not be able to know whether a job is finished or not. To set the proper permission, use: `chmod 755 slurm-cluster-status.py`
+
 - Start the pipeline: `sbatch slurm_snakemake.sh`
+
 
 Snakemake makes uses of **singularity** to pull images of Dockers containers. Dockers containers contains the softwares required for the rules set up in the Snakemake workflow.
 **Singularity is a must and will most likely be the source of error** 
 For now I have hard coded the module loaded by Shark: `module load container/singularity/3.10.0/gcc.8.5.0`. If in the future, this module is removed from Shark or modified, it might prevent the pipeline from working because it will not be able to pull containers. This line of code would then need to be modified in the file `slurm_snakemake.sh`.
 This line would need to be replaced by the line obtained after running `module spider singularity` on Shark.
-
 
 # Content of the repository
 
@@ -49,7 +79,6 @@ This line would need to be replaced by the line obtained after running `module s
 - **units.tsv**, is a tab separated value files containing information about the experiment name, the condition of the experiment (control or treatment) and the path to the fastq files relative to the **Snakefile**. **Change this file according to your samples.**
 
 - **rules/**, folder containing the rules called by the snakefile to run the pipeline, this improves the clarity of the Snakefile and might help modifying the file in the future.
-
 
 # Usage
 
@@ -83,8 +112,6 @@ Use the command `snakemake -np` to perform a dry run that prints out the rules a
 If the dry run is successful (no red lines on the screen), the workflow can be started with `sbatch slurm_snakemake.sh`
 
 # Main outputs
-
-The main output are :
 
 The main output are :
 
