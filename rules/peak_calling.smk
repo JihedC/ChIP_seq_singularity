@@ -16,4 +16,4 @@ rule call_narrow_peaks:
     log:
         RESULT_DIR + "logs/macs2/{treatment}_vs_{control}_peaks.narrowPeak.log"
     shell:
-        "macs2 callpeak -t {input.treatment} -c {input.control} {params.genomesize} --name {params.name} -q {params.qvalue} --nomodel --outdir results/bed/ &>{log}"
+        "macs2 callpeak -t {input.treatment} -c {input.control} {params.genomesize} --name {params.name} -q {params.qvalue} --nomodel --outdir results/macs2 &>{log}"
