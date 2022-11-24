@@ -116,11 +116,11 @@ The supplied template of the `units.tsv` file combines single-end and paired-end
 If you have **paired-end** reads, fill the column `fq2` with the path to the R2 file.
 
 ```
-sample    fq1                   fq2               condition
-100K      fastq/100K_R1.fq      fastq/100K_R2.fq  treatment
-50K	      fastq/50K_R1.fq	      fastq/50K_R2.fq	  treatment
-ChIP1	    fastq/SRX091645_T1.fq		                treatment
-ChIP2	    fastq/SRX091646_T1.fq		                control
+sample  fq1 fq2 condition
+100K  fastq/100K_R1.fq  fastq/100K_R2.fq  treatment
+50K fastq/50K_R1.fq fastq/50K_R2.fq treatment
+ChIP1 fastq/SRX091645_T1.fq   treatment
+ChIP2 fastq/SRX091646_T1.fq   control
 ```
 
 In the example above, the samples *100K* and *50K* are **paired-end** data while *ChIP1* and *ChIP2* are single-end data.
