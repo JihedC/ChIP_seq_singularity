@@ -3,8 +3,11 @@ A snakemake pipeline for the analysis of SE and PE ChIP-seq data using singulari
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.2.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Miniconda](https://img.shields.io/badge/miniconda-blue.svg)](https://conda.io/miniconda)
+[![Singularity](https://img.shields.io/badge/Singularity-important-brightgreen)](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html)
+[![Docker](https://img.shields.io/badge/Docker-important-blue)](https://www.docker.com/)
 
 # Aim
+
 Snakemake pipeline made for reproducible analysis of paired-end Illumina ChIP-seq data. The desired output of this pipeline are:
 - fastqc zip and html files
 - bigWig files (including bamCompare rule)
@@ -62,6 +65,11 @@ If not the job scheduler will not be able to know whether a job is finished or n
 
 - Start the pipeline: `sbatch slurm_snakemake.sh`
 
+- Check if the pipeline is working with `squeue -u {username}
+
+- The test run should take approximately 1h30min.
+
+- Once it finished you can use the function `snakemake --report` to create a html report file that summarize the analysis. An example of the report can be found [here](docs/report.html).
 
 Snakemake makes uses of **singularity** to pull images of Dockers containers. Dockers containers contains the softwares required for the rules set up in the Snakemake workflow.
 **Singularity is a must and will most likely be the source of error** 
@@ -103,6 +111,22 @@ It has many rich features. Read more [here](https://snakemake.readthedocs.io/en/
 
 Samples are listed in the `units.tsv` file and will be used by the Snakefile automatically. Change the name, the conditions accordingly.
 
+The supplied template of the `units.tsv` file combines single-end and paired-end experiment. In the case of single-end experiment the column `fq2` is left empty. Instead of writing a path in that column, simply press `TAB` to jump to the next column `condition`.
+
+If you have **paired-end** reads, fill the column `fq2` with the path to the R2 file.
+
+```
+sample    fq1                   fq2               condition
+100K      fastq/100K_R1.fq      fastq/100K_R2.fq  treatment
+50K	      fastq/50K_R1.fq	      fastq/50K_R2.fq	  treatment
+ChIP1	    fastq/SRX091645_T1.fq		                treatment
+ChIP2	    fastq/SRX091646_T1.fq		                control
+```
+
+In the example above, the samples *100K* and *50K* are **paired-end** data while *ChIP1* and *ChIP2* are single-end data.
+
+You can edit the `units.tsv` file using `nano units.tsv`.
+
 ## Dry run
 
 Use the command `snakemake -np` to perform a dry run that prints out the rules and commands.
@@ -121,8 +145,22 @@ The main output are :
 
 - **bigwig files** : Provides files allowing fast displays of read coverages track on any type of genome browsers. The default normalization is RPKM and can be modified in the `config.yaml` file.
 
+- **peak calling files**: Peak calling will be performed on the samples. For now it compares all samples annotated as `treatment` agains all samples annotated as `control`. In other words, the pipeline will generate more files than necessary and you will need to check the filenames to know which one you want to use.
+
+- MultiQC output: A summary of the statitics measured during the analysis. An example of the MultiQC output file obtained after a run with the test sample: [here](docs/multiqc_report.html).
+
 # Overview of the pipeline 
 
 Below is an overview of the jobs run for each sample through the pipeline:
 
 ![](docs/dag.png)
+
+# Unlock Snakemake 
+
+If for any reason, the Snakemake folder gets locked during the analysis. You can unlock it by running the command:
+
+```
+snakemake --unlock --cores 2
+```
+
+and then run the dry-run and pipeline as usually with `sbatch slurm_snakemake.sh`.
